@@ -1,0 +1,55 @@
+APPROACHV1
+TestCase:0
+AVG consistency:0.92
+AVG prediction:0.86
+TestCase:1
+AVG consistency:1.0184
+AVG prediction:0.9972
+TestCase:2
+AVG consistency:0.940368
+AVG prediction:0.879944
+TestCase:3
+AVG consistency:0.79880736
+AVG prediction:0.7375988800000001
+TestCase:4
+AVG consistency:0.6959761472
+AVG prediction:0.4547519776
+TestCase:5
+AVG consistency:0.693919522944
+AVG prediction:0.209095039552
+TestCase:6
+AVG consistency:0.91387839045888
+AVG prediction:0.06418190079104
+TestCase:7
+AVG consistency:0.9582775678091775
+AVG prediction:0.0412836380158208
+TestCase:8
+AVG consistency:1.0191655513561835
+AVG prediction:0.000825672760316416
+APPROACH3=====================TestCase:0
+AVG consistency:1.0
+AVG prediction:0.86
+TestCase:1
+AVG consistency:1.0
+AVG prediction:0.98
+TestCase:2
+AVG consistency:1.0
+AVG prediction:0.86
+TestCase:3
+AVG consistency:1.0
+AVG prediction:0.72
+TestCase:4
+AVG consistency:1.0
+AVG prediction:0.44
+TestCase:5
+AVG consistency:1.0
+AVG prediction:0.2
+TestCase:6
+AVG consistency:1.0
+AVG prediction:0.06
+TestCase:7
+AVG consistency:1.0
+AVG prediction:0.04
+TestCase:8
+AVG consistency:1.0
+AVG prediction:0.0

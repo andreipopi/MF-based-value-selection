@@ -1,0 +1,37 @@
+Resolution, Counterclockwise, _180Degres, Clockwise, Normal1
+LauncherPlacement, AllDisplays, Laptop
+Background, DelicatePetals1920x1280, MorningDew1920x1280, Ubuntu1920x1280, PrecisePagolin1920x1280, TwillightFrost1920x1280, EarlyBlossom1920x1280
+Theme, HighContrastInverse, AmbianceDefault, Radiance, HighContrast
+LauncherIconSize, _48, _64, _32
+RevealLocation, Left, TopLeftCorner
+RevealSensitivity, Low1, High1
+TurnScreenOffWhenInactiveFor, _1Hour, _10Minutes, _1Minute, _3Minutes, _2Minutes, Never, _30Minutes
+LockScreenAfter, _1Minute_, _5Minutes_, _2Minutes_, _30Minutes_, ScreenTurnsOff, _30Seconds, _10Minutes_, _1Hour_
+UseAVisualIndicationWhenAnAlertSoundOccurs, FlashTheWindowTitle, FlashTheEntireScreen
+Contrast, Low2, High2, HighInverse, Normal2
+AcceptanceDelay1, Short1, Long1
+AcceptanceDelay2, Long2, Short2
+Typing2, CursorBlinking, RepeatKeys
+AcceptanceDelay3, Short4, Long4
+Delay2, Long5, Short5
+MotionThreshold, Large1, Small1
+Mouse, PointerSpeed1, DragAndDrop, DoubleClickTimeOut
+LayoutSettings, AllowDifferentLayoutsForIndividualWindows, UseTheSameLayoutForAllWindows
+Launchers, KeyToShowTheHUD, LauncherTerminal
+Screenshots, TakeAScreenshotOfAWindow, CopyAScreenshotToClipboard, TakeAScreenshot, TakeAScreenshotOfAnArea, CopyAScreenhotOfAnAreaToClipboard, CopyAScreenshotOfAwindowToClipboard
+System, LogOut, LockScreen
+Typing3, AlternativeCharactersKey, ComposeKey, SwitchToPreviousSource, SwitchToNextSource
+UniversalAccess2, DecreaseTextSize, HighContrastOnOrOff, IncreaseTextSize, ZoomIn, ZoomOut, TurnOnScreenKeyboardOnOrOff, TurnZoomOnOrOff, TurnScreenReaderOnOrOff
+Windows, MoveWindow, ActivateTheWindowMenu, CloseWindow, MaximiseWindow, ToggleFullscreenMode, ResizeWindow, RaiseWindowAboveOtherWindows, ToggleShadedState, ToggleMaximisationState, LowerWindowBelowOtherWindows, MinimizeWindow, RestoreWindow
+General1, RightHanded, LeftHanded
+Scrolling, Disabled1, TwoFingerScrolling, AdgeScrolling
+Acceleration2, Slow4, Fast4
+Sensitivity2, High4, Low4
+Speed2, Fast2, Slow2
+Delay1, Short3, Long3
+Speed1, Fast1, Slow1
+AllowDifferentLayoutsForIndividualWindows, NewWindowsUseTheDefaultLayout, NewWindowsUseThePreviousWindowsLayout
+Acceleration1, Slow3, Fast3
+Sensitivity1, Low3, High3
+Tbreshold, Small2, Large2
+TimeOut, Long6, Short6
