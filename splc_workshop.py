@@ -26,21 +26,28 @@ for line in file:
     productsConfigurations.append(np.array(desired_array))
 file.close()
 
+# * * * * * * * * * * * * * * * * * * * * * * * * * 
+#  PRODUCT TABLE: productsConfigurations.         *
+# * * * * * * * * * * * * * * * * * * * * * * * * *
 productsConfigurations = np.array(productsConfigurations)
 
-#CREATE A SYNTHETIC HISTORICAL DATASET OF USER PURCHASES. (ASSUME 200 users)
-#we assign a random product to each of the 100 users
+
+# * * * * * * * * * * * * * * * * * * * * * * * * *
+#  HISTORICAL TRANSACTIONS: purchased products    *
+# * * * * * * * * * * * * * * * * * * * * * * * * *
+
+#CREATE A SYNTHETIC HISTORICAL DATASET OF USER PURCHASES. (ASSUME 500 users)
+#we assign a random product to each of the 500 users
 purchasedProducts =[]
 
-for i in range(0,500):
-    purchasedProducts.append(random.randint(0,99))
-
-print(purchasedProducts)
+#for example this is the case: users=500, products=100
+for i in range(0,500): #number of historical transactions available
+    purchasedProducts.append(random.randint(0,999)) #number of products 
 
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# stepbystep code
+# stepbystep code (code to generate a guiding file)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 stepbystep = open("stepByStep.txt", "a")
 stepbystep.write("Synthetic historical dataset:\n")
@@ -51,12 +58,15 @@ for line in purchasedProducts[0:10]:
     index+=1
 
 stepbystep.write("and so on...")
-
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# stepbystep code
+# end stepbystep code
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 users = range(0,500)
+
+
+
+
 #==================================================================
 #STEP 1.2:  Hold ID list of the expected solutions for each 265 users taken from the user dataset:
 #https://github.com/CSPHeuristix/CDBC/blob/master/CameraKB_ConfigurationDataset.data
@@ -66,18 +76,19 @@ users = range(0,500)
 #[userID, productID]
 usersPurchases = np.c_[users,purchasedProducts]
 
-print(usersPurchases)
-
-#usersPurchasesTest = usersPurchases[100:199, :] 
-#==================================================================
+#for userID in users:
+    #print("userID:"+ str(userID) +"confirm:"+ str(usersPurchases[userID][0])+"bought:"+ str(usersPurchases[userID][1])+"confirm:"+str(purchasedProducts[userID]))
 
 
 
 
+#now we need to create a matrix of historical transactions:
+# first create a matrix of historical transactions of the shape:
+
+# [500 X 263] rows:#users X columns:#values, then
+#transform this into hot encoding -> [500 X 526]
 productVariables = []
-
 productVariablesHotEncodings = []
-
 
 #for all users:
 for user in range(0,500):
@@ -92,7 +103,7 @@ for user in range(0,500):
 
     #==================================================================
  
-    #STEP 3.1: Convert the dense matrix of 200 users (training data) into one-hot encoding matrix -> 200x(more than 10)
+    #STEP 3.1: Convert the dense matrix of 500 users (training data) into one-hot encoding matrix -> 200x(more than 10)
     #==================================================================
     oneHotRow = []
     i = 0 #index of the variable in configuration
@@ -116,8 +127,6 @@ for user in range(0,500):
     else:
         productVariablesHotEncodings = np.vstack([productVariablesHotEncodings, oneHotRow])
     #==================================================================
-    
-
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -134,7 +143,7 @@ for line in productVariables[0:10]:
 stepbystep.write("and so on...")
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# stepbystep code
+# end stepbystep code
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
@@ -150,7 +159,6 @@ np.set_printoptions(suppress=True)
 #==================================================================
 #trainingSet = productVariables[0:100, :]
 #==================================================================
-
 #====================================================================
 #testSet = productVariables[100:200, :]
 #====================================================================
@@ -159,8 +167,6 @@ np.set_printoptions(suppress=True)
 
 #print(len(trainingSet))
 #print(len(testSet))
-
-
 
 
 f = open("Results/stats1.txt", "a")
@@ -408,12 +414,18 @@ for t in testCasesHot:
        # correctConfiguration = productsConfigurations[int(purchasedProducts[userID+400])]
 
 
-        correctConfiguration = productVariables[userID+425]
+        correctConfiguration = productVariables[userID+425] #number depends on where the test set starts
 
         consistent = False
         #check whether it is consistent
         #if solution[0] == 242:
         #   if solution[6] == 4:
+
+
+        #we want to check whether the calculated solution is consistent
+        #we call the solver with the calculated values
+
+        
 
 
         for configuration in productsConfigurations:
@@ -444,127 +456,4 @@ for t in testCasesHot:
     f.write("AVG prediction:"+str(avgPredictionQualityHot)+"\n")
 
 #=========================END APPROACH V1=======================
-
-
-
-
-print("===================APPROACH V3========================")
-#=========================APPROACH V3=========================
-
-
-f.write("APPROACH3=====================")
-#print(productVariablesHotEncodings[190:201, :])
-
-
-
-#==================================================================
-testcaseIndex = 0
-
-for testcase in testCasesHot:
-   
-    f.write("TestCase:"+str(testcaseIndex)+"\n")
-    solution = np.array([])
-
-    #avgSolvingTimeHot = 0
-    avgConsistencyHot = 0
-    avgPredictionQualityHot = 0
-
-    userID = 0
-
-    for transaction in testcase: 
-
-
-        problem = splc_workshop_csp.initialize(stepbystep)
-
-        #compute min distance user
-        min_distance_user_ID = closestNeighbourDense(transaction,denseMatrix)
-        #min_distance_valueOrder is the (increasing sorted) value order that the closest user used for his configuration
-        min_distance_valueOrder = indeces_vordering[min_distance_user_ID]
-
-        
-        #correctConfiguration is the actual configuration purchased by the user in the test set
-        correctConfiguration = productVariables[userID+425] #since our test dataset starts at 150, we just sum the current id and we get the correct element in the test set
-
-        #print(min_distance_valueOrder)
-
-
-        #creating the value order by keeping the assigned variables
-        #and assigning unassigned ones to the ones in the closest neighbour
-        ##############################################################
-        solutionHot = []
-        storeVariableValues = []
-        for key in transaction:
-            storeVariableValues.append(int(key))
-            countDomain += 1
-            if(countDomain > 1):
-                countDomain = 0
-                countVariable +=1
-                solutionHot.append(storeVariableValues)
-                storeVariableValues = []#reset vordering for next variable
-            
-        #now we need to assign the missing variable/s a 0 or 1
-
-        
-        #A final solution would be the transaction, with replaced values for the missing assignments from
-        #the closest neighbour so from (valueOrder)
-        
-        varIndex = 0
-        for variable in solutionHot:
-            
-            if variable[0] ==2: #if the first element is a 2, it means the variable is unassigned
-                indexOfHighestValue = min_distance_valueOrder[varIndex][1] #get the index of the highest value(the one that was assigned) from the closest neighbour value ordering
-                #if index of highest value value = 0, then the hot encoding becomes [1,0]
-                #if index of hghest value = 1 then hot encoding becomes [0,1]: it means closest neighbour assigned 1 to that variable
-                if indexOfHighestValue == 0:
-                    solutionHot[varIndex] = [1,0]
-                if indexOfHighestValue == 1:
-                    solutionHot[varIndex] = [0,1]
-
-            varIndex +=1
-
-        #############################################################
-
-        #WRONG#solution = splc_workshop_csp.solve(problem, min_distance_valueOrder,productsConfigurations) #, time
-        solution = splc_workshop_csp.solve(problem, solutionHot,productsConfigurations) #, time
-
-
-        
-        #print("min distance value order",min_distance_valueOrder)
-        #print("transaction",transaction)
-        #print("neighbourvalueorder",min_distance_valueOrder)
-        #print("solution",solution)
-        #print("correct",correctConfiguration)
-       # sys.exit()
-
-
-        #print("Solution", solution,"UserID", userID)
-        #avgSolvingTimeHot += time
-
-        #if the CSP solution is not empty
-        if solution != []:
-
-            consistent = True #it means the solver found a solution satysfing the constraints
-            
-            if consistent: 
-                avgConsistencyHot += 1
-                
-                #only if the solution is consistent we check its prediction quality
-                if (solution == correctConfiguration).all():  #correctConfiguration is actually purchased configuration(in testdata)
-                    avgPredictionQualityHot += 1 
-    
-        userID += 1
-
-    #avgSolvingTimeHot = avgSolvingTimeHot/ len(testcase)
-    avgConsistencyHot = avgConsistencyHot /len(testcase)
-    avgPredictionQualityHot = avgPredictionQualityHot /len(testcase)
-  
-   
-    #print("average solving time", avgSolvingTimeHot)
-    print("average consistency", avgConsistencyHot)
-    print("average prediction", avgPredictionQualityHot)
-
-    testcaseIndex +=1
-    #f.write("AVG solving time:"+str(avgSolvingTimeHot)+"\n")
-    f.write("AVG consistency:"+str(avgConsistencyHot)+"\n")
-    f.write("AVG prediction:"+str(avgPredictionQualityHot)+"\n")
 

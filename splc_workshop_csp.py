@@ -258,8 +258,6 @@ def initialize(stepbystep):
 
     prob = constraint.Problem()
 
-   
-
     with open('linuxFiles/products.txt') as f:
         listOfFeatures = f.readline().rstrip().split(",") #the first line in the file is the list of features
 
@@ -279,9 +277,7 @@ def initialize(stepbystep):
 
 def solve(prob,valueOrder,productConfigurations):
     
-
     def kbConstraint(*vars):
-        
         transaction = []
         count = 0
         for v in vars:   
@@ -309,9 +305,6 @@ def solve(prob,valueOrder,productConfigurations):
             return True
         
         return False
-    
-    
-
     ##################END AUXILIARY FUNCTIONS##########################
 
 
