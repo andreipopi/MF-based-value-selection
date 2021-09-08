@@ -255,7 +255,6 @@ def initialize(stepbystep):
                                     variables
                                 )
 
-
     prob = constraint.Problem()
 
     with open('linuxFiles/products.txt') as f:
@@ -355,17 +354,17 @@ def solve(prob,valueOrder,productConfigurations):
     #print("SOLAS",solution)
     solution_array = []
 
+
+    #we need to take the variables in order because for some reason python mixes them in the solution
     if solution != None:
         for i in range(0,numberOfVariables):
-            solution_array = np.append(solution_array, solution["v"+str(i)]) #we need to take the variables in order because for some reason python mixes them in the solution
+            solution_array = np.append(solution_array, solution["v"+str(i)]) 
 
         
-            
-
     #print("solutionarray",solution_array)
-       
     prob.reset()
     return solution_array #, (time.time() - start_time)
+    
 ####################################################
 
 
