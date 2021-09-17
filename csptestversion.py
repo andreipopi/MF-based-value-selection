@@ -6,7 +6,7 @@ import sys
 
 
 
-def initialize(stepbystep):
+def initialize():
     #we create a problem and add the domain constraints which will be the same for all problems,
     #later, in solve(), we add the producttable constraint and we solve the problem.
     ###############  AUXILIARY FUNCTIONS  ################################
@@ -15,7 +15,6 @@ def initialize(stepbystep):
     # MANDATORY RELATIONSHIPS
     ###############################################################################
     def mandatory():
-        stepbystep.write("Mandatory Relationships \n")
         file1 = open('linuxFiles/mandatoryRelationships.txt')
         lines = file1.readlines()
         # Strips the newline character
@@ -31,7 +30,6 @@ def initialize(stepbystep):
             index1 = list(listOfFeatures).index(listOfParameters[0])
             index2 = list(listOfFeatures).index(listOfParameters[1])
             #print("indeces",index1,"-",index2)
-            stepbystep.write("("+"v"+str(index1)+" == 0 and "+"v"+str(index2)+" == 0) or ("+"v"+str(index1)+" == 1 and "+ "v"+str(index2)+" == 1) \n")
             prob.addConstraint(
                             lambda parameter1, parameter2: 
                                     (parameter1 == 0 and parameter2 == 0 ) or
@@ -44,10 +42,7 @@ def initialize(stepbystep):
     ###############################################################################
     #optional and requires can be both translated by the implication rules
     def optional(fileName):
-        if fileName =="linuxFiles/optionalRelationships.txt":
-            stepbystep.write("Optional Relationship \n")
-        if fileName =="linuxFiles/requireConstraints.txt":
-            stepbystep.write("Require Relationship \n")
+       
         file1 = open(fileName)
         lines = file1.readlines()
         file1.close()
@@ -61,7 +56,6 @@ def initialize(stepbystep):
             index2 = list(listOfFeatures).index(listOfParameters[1])
             #print("indeces",index1,"-",index2)
             
-            stepbystep.write("("+"v"+str(index1)+" == 0 and "+"v"+str(index2)+" == 0) or ("+"v"+str(index1)+" == 1 and "+ "v"+str(index2)+" == 1) or ("+"v"+str(index1)+"== 0 and "+ "v"+str(index2)+" == 1),("+"v"+str(index1)+","+"v"+str(index2)+") \n")
 
             print("("+"v"+str(index1)+" == 0 and "+"v"+str(index2)+" == 0) or ("+"v"+str(index1)+" == 1 and "+ "v"+str(index2)+" == 1) or ("+"v"+str(index1)+"== 0 and "+ "v"+str(index2)+" == 1),("+"v"+str(index1)+","+"v"+str(index2)+") \n")
             prob.addConstraint(
@@ -82,7 +76,6 @@ def initialize(stepbystep):
     #we need to dynamically generate both indexes and expression for lambda
     def alternative():
         print("Alternative Relationship\n")
-        stepbystep.write("Alternative Relationships \n")
         file1 = open('linuxFiles/alternativeRelationships.txt')
         lines = file1.readlines()
 
@@ -144,7 +137,6 @@ def initialize(stepbystep):
         
             
             print(expressionTotal+"\n")
-            stepbystep.write(str(expressionTotal)+"\n")
             prob.addConstraint(
                             lambda *lambdaParameters: #to pass variable number of parameters
                                     expressionTotal,
@@ -155,7 +147,6 @@ def initialize(stepbystep):
     ###############################################################################
     def orRelationship():
         print("OR Relationship\n")
-        stepbystep.write("OR Relationships \n")
         file1 = open('linuxFiles/orRelationships.txt')
         lines = file1.readlines()
 
@@ -201,7 +192,6 @@ def initialize(stepbystep):
             expressionTotal =expressionTotal + str(lambdaParameters[-1])+"==1 )) "
 
             print(expressionTotal+"\n")
-            stepbystep.write(str(expressionTotal)+"\n")
             prob.addConstraint(
                             lambda *lambdaParameters: 
                                     expressionTotal,
@@ -209,7 +199,6 @@ def initialize(stepbystep):
                                 )
     def threeCNF():
         print("3CNF constraints\n")
-        stepbystep.write("3CNF Constraints \n")
         file1 = open('linuxFiles/constraints.txt')
         lines = file1.readlines()
         # Strips the newline character
@@ -247,7 +236,6 @@ def initialize(stepbystep):
             expressionTotal =expressionTotal + str(lambdaParameters[-1])+"==1 )) "
             
             print(expressionTotal+"\n")
-            stepbystep.write(str(expressionTotal)+"\n")
             #print(expressionTotal)
             prob.addConstraint(
                             lambda *lambdaParameters: 
@@ -307,14 +295,21 @@ def solve(prob,valueOrder,productConfigurations):
     ##################END AUXILIARY FUNCTIONS##########################
 
 
-    ##################################################################
+
+
+
+
+    ###################################################################
     #  M A I N 
     ###################################################################
+
+    
 
     #print(listOfFeatures)
     #print(listOfFeatures.size)
     
     productTable = productConfigurations 
+
     domains =[]
     numberOfVariables = 263
     vars = []#list of variables, we have 263 of them
@@ -327,76 +322,44 @@ def solve(prob,valueOrder,productConfigurations):
     for order in valueOrder: #we use the order of the closest neighbour (python will take the last element in the domain, which is the highest)
         domains.append(order)
     
+    print(domains)
     for i in range(0,numberOfVariables):
         vars.append("v"+str(i))
-        prob.addVariable(vars[i], domains[i])
-        #if domains[i][0] == 1:
-        #    prob.addVariable(vars[i],[0])
-        #if domains[i][1] == 1:
-        #    prob.addVariable(vars[i],[1]) 
+       # prob.addVariable(vars[i],domains[i])
+
+        if domains[i][0] == 1:
+            prob.addVariable(vars[i],[0])
+        else:
+            if domains[i][1] == 1:
+                prob.addVariable(vars[i],[1])
+            else:
+                prob.addVariable(vars[i],[0])
+
+   
 
     #print("domains",domains)
-    #print(prob._variables)
+    print(prob._variables)
 
     #prob.addConstraint(kbConstraint, vars) #this constraint is created without lambda
-    #kbConstraint()
+   # kbConstraint()
+
     #print(prob._constraints)
 
-    solution = None
-    i = 0
-
-    
-    import signal
-
-    class TimeoutException(Exception):   # Custom exception class
-        pass
-
-    def timeout_handler(signum, frame):   # Custom signal handler
-        raise TimeoutException
-
-    # Change the behavior of SIGALRM
-    signal.signal(signal.SIGALRM, timeout_handler)
-    
-    
-    print("calculating"+str(i))
-
-    #try for 15 sec to get a solution
-    for i in range(1):
-         # Start the timer. Once 5 seconds are over, a SIGALRM signal is sent.
-        signal.alarm(1)    
-        # This try/except loop ensures that 
-        #   you'll catch TimeoutException when it's sent.
-        try:
-            solution = prob.getSolution() # Whatever your function that might hang
-        except TimeoutException:
-            continue # continue the for loop if function A takes more than 5 second
-        else:
-            # Reset the alarm
-            signal.alarm(0)
-        
-    
-
-
-
-
-
-    
+    solution = prob.getSolution()
     #print("--- %s seconds ---" % (time.time() - start_time))
+        
+    #print("SOLAS",solution)
     solution_array = []
 
+
     #we need to take the variables in order because for some reason python mixes them in the solution
-    print("before if")
     if solution != None:
-        print("after if")
-        print("solution"+str(solution))
-        print("numberof variables"+str(numberOfVariables))
         for i in range(0,numberOfVariables):
             solution_array = np.append(solution_array, solution["v"+str(i)]) 
-    #print("solutionarray",solution_array)
 
-    print("solution array"+ str(solution_array))
-    print("point")
-    
+        
+    #print("solutionarray",solution_array)
+    prob.reset()
     return solution_array #, (time.time() - start_time)
     
 ####################################################

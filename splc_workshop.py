@@ -20,7 +20,7 @@ print(domains)
 #DEFINE PRODUCT TABLE FROM FILE: 1000 product configurations
 productsConfigurations = []
 
-file = open("linuxFiles/randomProductTable.txt")
+file = open("linuxFiles/randomProductTable2.txt")
 next(file)
 for line in file:
     desired_array = [int(numeric_string) for numeric_string in line.rstrip().split(",")]
@@ -42,7 +42,7 @@ productsConfigurations = np.array(productsConfigurations)
 purchasedProducts =[]
 
 #for example this is the case: users=500, products=100
-for i in range(0,600): #number of historical transactions available
+for i in range(0,500): #number of historical transactions available
     purchasedProducts.append(random.randint(0,998)) #number of products 
 
 
@@ -63,10 +63,7 @@ stepbystep.write("and so on...")
 # end stepbystep code
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-users = range(0,600)
-
-
-
+users = range(0,500)
 
 #==================================================================
 #STEP 1.2:  Hold ID list of the expected solutions for each 265 users taken from the user dataset:
@@ -81,8 +78,6 @@ usersPurchases = np.c_[users,purchasedProducts]
     #print("userID:"+ str(userID) +"confirm:"+ str(usersPurchases[userID][0])+"bought:"+ str(usersPurchases[userID][1])+"confirm:"+str(purchasedProducts[userID]))
 
 
-
-
 #now we need to create a matrix of historical transactions:
 # first create a matrix of historical transactions of the shape:
 
@@ -92,7 +87,7 @@ productVariables = []
 productVariablesHotEncodings = []
 
 #for all users:
-for user in range(0,600):
+for user in range(0,500):
     purchasedProductID = int(usersPurchases[user][1])
 
     #STEP 2.1: Create a matrix with real values using the training data (NOT one-hot encoding matrix) -> 200x10
@@ -103,7 +98,7 @@ for user in range(0,600):
        productVariables = np.vstack([productVariables, productsConfigurations[purchasedProductID]])
 
     #==================================================================
- 
+
     #STEP 3.1: Convert the dense matrix of 500 users (training data) into one-hot encoding matrix -> 200x(more than 10)
     #==================================================================
     oneHotRow = []
@@ -128,6 +123,7 @@ for user in range(0,600):
     else:
         productVariablesHotEncodings = np.vstack([productVariablesHotEncodings, oneHotRow])
     #==================================================================
+
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -170,7 +166,7 @@ np.set_printoptions(suppress=True)
 #print(len(testSet))
 
 
-f = open("Results/stats600.txt", "a")
+f = open("Results/stats500.txt", "a")
 
 print("productCOnfigurations")
 print(productsConfigurations)
@@ -180,8 +176,8 @@ print(purchasedProducts)
 
 #========================For both V1 and v3=========================
 
-trainingSetHotEncoding = productVariablesHotEncodings[0:400, :]
-testSetHotEncoding = productVariablesHotEncodings[400:600, :] #######CORRECT THIS
+trainingSetHotEncoding = productVariablesHotEncodings[0:350, :]
+testSetHotEncoding = productVariablesHotEncodings[350:500, :] #######CORRECT THIS
 
 print("trainset",len(trainingSetHotEncoding))
 print("testSetHotEncodingSize",len(testSetHotEncoding))
@@ -281,7 +277,6 @@ def testCaseHot(missing):
         index+=1
     return testcase
 
-
 testcase1HotEncoding = testCaseHot(10)
 testcase2HotEncoding = testCaseHot(15)
 testcase3HotEncoding = testCaseHot(20)
@@ -291,8 +286,6 @@ testcase6HotEncoding = testCaseHot(90)
 testcase7HotEncoding = testCaseHot(140)
 testcase8HotEncoding = testCaseHot(170)
 testcase9HotEncoding = testCaseHot(230)
-
-
 
 testCasesHot =[]
 testCasesHot.append(testcase3HotEncoding)
@@ -327,6 +320,7 @@ def closestNeighbourDense(new_transaction, denseMatrix):
 #===========================APPROACH V1=============================
 f.write("APPROACHV1\n")
 
+
 avgSolvingTimeHot = 0
 avgConsistencyHot = 0
 avgPredictionQualityHot = 0
@@ -338,8 +332,6 @@ for t in testCasesHot:
 
     userID = 0
     for transaction in t:
-
-        
 
         print("test transaction", transaction)
 
@@ -358,8 +350,6 @@ for t in testCasesHot:
         variablesValueOrders = indeces_vordering[closestneighoburIndex]
         print("value order of closest neighbour", variablesValueOrders)
 
-        
-        
         #REBUILD THE SOLUTION FROM HOT ENCODING
 
         #we take the transaction, we want to keep the assigned variables
@@ -377,11 +367,7 @@ for t in testCasesHot:
             
         print("solution before changing 2",solutionHot)
 
-        
-
         #now we need to assign the missing variable/s a 0 or 1
-
-        
         #A final solution would be the transaction, with replaced values for the missing assignments from
         #the closest neighbour so from (valueOrder)
         
@@ -433,7 +419,7 @@ for t in testCasesHot:
 
        # correctConfiguration = productsConfigurations[int(purchasedProducts[userID+400])]
 
-        correctConfiguration = productVariables[userID+400] #number depends on where the test set starts
+        correctConfiguration = productVariables[userID+350] #number depends on where the test set starts
 
       
         #check whether it is consistent
@@ -448,14 +434,31 @@ for t in testCasesHot:
         if consistent: 
             avgConsistencyHot += 1
             #only if the solution is consistent we check its prediction quality
-            if (solution == correctConfiguration).all():  #correctConfiguration is the value in the testData
-                avgPredictionQualityHot += 1 
+            #if (solution == correctConfiguration).all():  #correctConfiguration is the value in the testData
+            #    avgPredictionQualityHot += 1 
         
+        #new prediction computation wit
+
+        predictionCurrentTransaction = 0
+
+        index = 0
+        for var in correctConfiguration:
+
+            if var == solution[index]:
+                predictionCurrentTransaction += 1
+            index +=1
+        
+
+        avgPredictionQualityHot += predictionCurrentTransaction/ len(correctConfiguration) #sum the percentage of correct variables in the current recommendation
+
         userID +=1
                 
     #avgSolvingTimeHot = avgSolvingTimeHot/ len(t)
     avgConsistencyHot = avgConsistencyHot /len(t)
-    avgPredictionQualityHot = avgPredictionQualityHot /len(t)
+    #avgPredictionQualityHot = avgPredictionQualityHot /len(t)
+
+    avgPredictionQualityHot = avgPredictionQualityHot /len(t) #divide sum of percentage correct predictions by number of all transactions
+
   
     #print("average solving time", avgSolvingTimeHot)
     print("average consistency", avgConsistencyHot)
@@ -467,7 +470,6 @@ for t in testCasesHot:
     f.write("AVG prediction:"+str(avgPredictionQualityHot)+"\n")
 
 #=========================END APPROACH V1=======================
-
 
 
 print("===================APPROACH V3========================")
@@ -494,17 +496,15 @@ for testcase in testCasesHot:
 
     for transaction in testcase: 
 
-
         problem = splc_workshop_csp.initialize(stepbystep)
 
         #compute min distance user
         min_distance_user_ID = closestNeighbourDense(transaction,denseMatrix)
         #min_distance_valueOrder is the (increasing sorted) value order that the closest user used for his configuration
         min_distance_valueOrder = indeces_vordering[min_distance_user_ID]
-
         
         #correctConfiguration is the actual configuration purchased by the user in the test set
-        correctConfiguration = productVariables[userID+400] #since our test dataset starts at 150, we just sum the current id and we get the correct element in the test set
+        correctConfiguration = productVariables[userID+350] #since our test dataset starts at 150, we just sum the current id and we get the correct element in the test set
 
         #print(min_distance_valueOrder)
 
@@ -545,10 +545,12 @@ for testcase in testCasesHot:
 
         #############################################################
 
+        
+        print(solutionHot)
         #WRONG#solution = splc_workshop_csp.solve(problem, min_distance_valueOrder,productsConfigurations) #, time
         solution = splc_workshop_csp.solve(problem, solutionHot,productsConfigurations) #, time
 
-
+        print("out of problem")
         
         #print("min distance value order",min_distance_valueOrder)
         #print("transaction",transaction)
@@ -563,22 +565,45 @@ for testcase in testCasesHot:
 
         #if the CSP solution is not empty
         if solution != []:
-
             consistent = True #it means the solver found a solution satysfing the constraints
-            
             if consistent: 
                 avgConsistencyHot += 1
                 
                 #only if the solution is consistent we check its prediction quality
-                if (solution == correctConfiguration).all():  #correctConfiguration is actually purchased configuration(in testdata)
-                    avgPredictionQualityHot += 1 
+                #if (solution == correctConfiguration).all():  #correctConfiguration is actually purchased configuration(in testdata)
+                #    avgPredictionQualityHot += 1 
+        
+
+        #build final solution (no hot encoding)
+        sol = []
+        for hotencoding in solutionHot:
+            if hotencoding[0] == 1:
+                sol.append(0)
+            if hotencoding[1] == 1:
+                sol.append(1)
+
+        predictionCurrentTransaction = 0
+
+       
+        index = 0
+        for var in correctConfiguration:
+
+            if var == sol[index]:
+                predictionCurrentTransaction += 1
+            index +=1
+        
+
+        avgPredictionQualityHot += predictionCurrentTransaction/ len(correctConfiguration) #sum the percentage of correct variables in the current recommendation
+
     
         userID += 1
+        problem.reset()
 
     #avgSolvingTimeHot = avgSolvingTimeHot/ len(testcase)
     avgConsistencyHot = avgConsistencyHot /len(testcase)
-    avgPredictionQualityHot = avgPredictionQualityHot /len(testcase)
-  
+    #avgPredictionQualityHot = avgPredictionQualityHot /len(testcase)
+    avgPredictionQualityHot = avgPredictionQualityHot /len(t) #divide sum of percentage correct predictions by number of all transactions
+
    
     #print("average solving time", avgSolvingTimeHot)
     print("average consistency", avgConsistencyHot)
@@ -588,4 +613,3 @@ for testcase in testCasesHot:
     #f.write("AVG solving time:"+str(avgSolvingTimeHot)+"\n")
     f.write("AVG consistency:"+str(avgConsistencyHot)+"\n")
     f.write("AVG prediction:"+str(avgPredictionQualityHot)+"\n")
-

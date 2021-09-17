@@ -1,55 +1,55 @@
 APPROACHV1
 TestCase:0
-AVG consistency:1.0
-AVG prediction:0.56
+AVG consistency:0.56
+AVG prediction:0.9893536121673003
 TestCase:1
-AVG consistency:1.02
-AVG prediction:0.6712
+AVG consistency:0.5712
+AVG prediction:1.010813688212928
 TestCase:2
-AVG consistency:1.0204
-AVG prediction:0.5734239999999999
+AVG consistency:0.571424
+AVG prediction:1.009569885931559
 TestCase:3
-AVG consistency:1.020408
-AVG prediction:0.49146848
+AVG consistency:0.57142848
+AVG prediction:1.0023967209125475
 TestCase:4
-AVG consistency:1.0204081600000001
-AVG prediction:0.2698293696
+AVG consistency:0.5714285696
+AVG prediction:0.9921391891711028
 TestCase:5
-AVG consistency:1.0204081632
-AVG prediction:0.185396587392
+AVG consistency:0.571428571392
+AVG prediction:0.9689682590685936
 TestCase:6
-AVG consistency:1.020408163264
-AVG prediction:0.12370793174783999
+AVG consistency:0.57142857142784
+AVG prediction:0.938847045789737
 TestCase:7
-AVG consistency:1.02040816326528
-AVG prediction:0.062474158634956804
+AVG consistency:0.5714285714285569
+AVG prediction:0.9190811234253001
 TestCase:8
-AVG consistency:1.0204081632653057
-AVG prediction:0.021249483172699136
+AVG consistency:0.5714285714285711
+AVG prediction:0.883248542620597
 APPROACH3=====================TestCase:0
-AVG consistency:1.0
-AVG prediction:0.56
+AVG consistency:0.92
+AVG prediction:0.9893536121673003
 TestCase:1
-AVG consistency:1.0
-AVG prediction:0.66
+AVG consistency:0.92
+AVG prediction:0.9910266159695822
 TestCase:2
-AVG consistency:1.0
-AVG prediction:0.56
+AVG consistency:0.92
+AVG prediction:0.9893536121673003
 TestCase:3
-AVG consistency:1.0
-AVG prediction:0.48
+AVG consistency:0.92
+AVG prediction:0.9822053231939165
 TestCase:4
-AVG consistency:1.0
-AVG prediction:0.26
+AVG consistency:0.9
+AVG prediction:0.972091254752852
 TestCase:5
-AVG consistency:1.0
-AVG prediction:0.18
+AVG consistency:0.88
+AVG prediction:0.9491254752851717
 TestCase:6
-AVG consistency:1.0
-AVG prediction:0.12
+AVG consistency:0.88
+AVG prediction:0.9194676806083649
 TestCase:7
-AVG consistency:1.0
-AVG prediction:0.06
+AVG consistency:0.94
+AVG prediction:0.9003041825095056
 TestCase:8
-AVG consistency:1.0
-AVG prediction:0.02
+AVG consistency:0.86
+AVG prediction:0.864866920152091
